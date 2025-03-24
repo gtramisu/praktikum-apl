@@ -67,7 +67,7 @@ int registrasi() {
     return 0;
 }
 
-bool login() {
+int login() {
     string nama, nim;
     int percobaan = 0;
 

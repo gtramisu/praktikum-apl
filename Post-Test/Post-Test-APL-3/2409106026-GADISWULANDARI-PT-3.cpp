@@ -6,25 +6,25 @@ using namespace std;
 #define MAX_PARFUM 50
 #define MAX_USER 50
 
+struct User {
+    string nama;
+    string nim;
+};
+
 struct Parfum {
     string merk;
     string nama;
     string aroma;
     string harga;  
     string ukuran; 
-};
-
-struct User {
-    string nama;
-    string nim;
+    User pengguna; 
 };
 
 Parfum parfums[MAX_PARFUM];
-User  users[MAX_USER];
 int jumlahParfum = 24;
-int jumlahUser  = 0;
+int jumlahUser   = 0;
 
-int inisialisasiData() {
+int main() {
     parfums[0] = {"Ataraksia", "Serenity", "Woody", "Rp250000", "50 ml"};
     parfums[1] = {"Ataraksia", "Elysium", "Fresh Citrus", "Rp300000", "100 ml"};
     parfums[2] = {"Alchemist", "Philosopher's Scent", "Floral Spicy", "Rp450000", "50 ml"};
@@ -49,167 +49,7 @@ int inisialisasiData() {
     parfums[21] = {"Jo Malone", "Wood Sage & Sea Salt", "Aromatic Woody", "Rp2300000", "100 ml"};
     parfums[22] = {"Carolina Herrera", "Good Girl", "Sweet Gourmand", "Rp2100000", "100 ml"};
     parfums[23] = {"Carolina Herrera", "Bad Boy", "Spicy Oriental", "Rp2200000", "100 ml"};
-    return 0; 
-}
 
-int registrasi() {
-    if (jumlahUser  >= MAX_USER) {
-        cout << "Tidak bisa mendaftar lagi, kapasitas sudah penuh.\n";
-        return 0;
-    }
-
-    cout << "\nRegistrasi Pengguna Baru\n";
-    cout << "Nama: "; getline(cin, users[jumlahUser ].nama);
-    cout << "NIM (3 digit): "; getline(cin, users[jumlahUser ].nim);
-
-    jumlahUser ++;
-    cout << "Registrasi berhasil! Anda sekarang dapat login.\n";
-    return 0;
-}
-
-int login() {
-    string nama, nim;
-    int percobaan = 0;
-
-    cout << "\n=================================================\n";
-    cout << "||           MANAJEMEN DISSCENT STORE          ||\n";
-    cout << "=================================================\n";
-
-    while (percobaan < 3) {
-        cout << "\nSelamat datang di Manajemen DisScent Store!\n";
-        cout << "Masukkan Nama: "; getline(cin, nama);
-        cout << "Masukkan NIM (3 digit): "; getline(cin, nim);
-
-        bool userFound = false;
-        for (int i = 0; i < jumlahUser ; i++) {
-            if (users[i].nama == nama && users[i].nim == nim) {
-                userFound = true;
-                break;
-            }
-        }
-
-        if (userFound) {
-            return true; 
-        } else {
-            percobaan++;
-            cout << "\nLogin gagal, silahkan coba lagi! Percobaan ke-" << percobaan << " dari 3.\n";
-        }
-    }
-
-    cout << "\nYahh login sudah gagal sebanyak 3 kali. Program berhenti.\n";
-    exit(0); 
-    return false; 
-}
-
-int tampilkanData() {
-    cout << "\n+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
-    cout << "| No | Merk                     | Nama Parfum               | Aroma             | Harga      | Ukuran     |" << endl;
-    cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
-
-    for (int i = 0; i < jumlahParfum; i++) {
-        cout << "| " << (i + 1) << "  | " << parfums[i].merk;
-        cout << string(25 - parfums[i].merk.length(), ' ') << "| " << parfums[i].nama;
-        cout << string(25 - parfums[i].nama.length(), ' ') << "| " << parfums[i].aroma;
-        cout << string(18 - parfums[i].aroma.length(), ' ') << "| " << parfums[i].harga;
-        cout << " | " << parfums[i].ukuran << " |" << endl;
-    }
-    cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+\n" << endl;
-    return 0; 
-}
-
-int tambahParfum() {
-    if (jumlahParfum >= MAX_PARFUM) {
-        cout << "Tidak bisa menambah parfum lagi, kapasitas sudah penuh.\n";
-        return 0;
-    }
-
-    cout << "\nTambah Parfum Baru\n";
-    cout << "Merk Parfum: "; getline(cin, parfums[jumlahParfum].merk);
-    cout << "Nama Parfum: "; getline(cin, parfums[jumlahParfum].nama);
-    cout << "Aroma Parfum: "; getline(cin, parfums[jumlahParfum].aroma);
-    cout << "Harga Parfum (Rp): "; getline(cin, parfums[jumlahParfum].harga);
-
-    cout << "Ukuran Parfum:\n";
-    cout << "1. 50 ml\n";
-    cout << "2. 100 ml\n";
-    cout << "Pilih ukuran (1/2): ";
-    int pilihanUkuran;
-    cin >> pilihanUkuran;
-    cin.ignore();
-
-    if (pilihanUkuran == 1) {
-        parfums[jumlahParfum].ukuran = "50 ml";
-    } else if (pilihanUkuran == 2) {
-        parfums[jumlahParfum].ukuran = "100 ml";
-    } else {
-        cout << "Pilihan tidak valid, ukuran diatur ke 50 ml.\n";
-        parfums[jumlahParfum].ukuran = "50 ml";
-    }
-
-    jumlahParfum++;
-    cout << "Parfum berhasil ditambahkan!\n";
-    tampilkanData();
-    return 0; 
-}
-
-int ubahParfum() {
-    int index;
-    tampilkanData();
-    cout << "Pilih nomor parfum yang ingin diubah: "; cin >> index;
-    cin.ignore();
-
-    if (index > 0 && index <= jumlahParfum) {
-        cout << "Merk Parfum Baru: "; getline(cin, parfums[index - 1].merk);
-        cout << "Nama Parfum Baru: "; getline(cin, parfums[index - 1].nama);
-        cout << "Aroma Parfum Baru: "; getline(cin, parfums[index - 1].aroma);
-        cout << "Harga Parfum Baru (Rp): "; getline(cin, parfums[index - 1].harga);
-
-        cout << "Ukuran Parfum Baru:\n";
-        cout << "1. 50 ml\n";
-        cout << "2. 100 ml\n";
-        cout << "Pilih ukuran (1/2): ";
-        int pilihanUkuran;
-        cin >> pilihanUkuran;
-        cin.ignore(); 
-
-        if (pilihanUkuran == 1) {
-            parfums[index - 1].ukuran = "50 ml";
-        } else if (pilihanUkuran == 2) {
-            parfums[index - 1].ukuran = "100 ml";
-        } else {
-            cout << "Pilihan tidak valid, ukuran tidak diubah.\n";
-        }
-
-        cout << "Data parfum berhasil diubah!\n";
-    } else {
-        cout << "Nomor parfum tidak ada!\n";
-    }
-
-    tampilkanData();
-    return 0; 
-}
-
-int hapusParfum() {
-    int index;
-    tampilkanData();
-    cout << "Pilih nomor parfum yang ingin dihapus: "; cin >> index;
-    cin.ignore();
-
-    if (index > 0 && index <= jumlahParfum) {
-        for (int i = index - 1; i < jumlahParfum - 1; i++) {
-            parfums[i] = parfums[i + 1]; 
-        }
-        jumlahParfum--;
-        cout << "Data parfum berhasil dihapus!\n";
-    } else {
-        cout << "Nomor parfum tidak ada!\n";
-    }
-
-    tampilkanData();
-    return 0;
-}
-
-int main() {
     int pilihan;
 
     do {
@@ -222,13 +62,41 @@ int main() {
         cout << "=================================================\n";
         cout << "Pilih menu: "; cin >> pilihan;
         cin.ignore();
-        switch (pilihan) {
-            case 1: registrasi(); break;
-            case 2: 
-                if (login()) {
-                    inisialisasiData(); 
-                    int menuPilihan;
 
+        if (pilihan == 1) {
+            if (jumlahUser  >= MAX_USER) {
+                cout << "Tidak bisa mendaftar lagi, kapasitas sudah penuh.\n";
+                continue;
+            }
+
+            cout << "\nRegistrasi Pengguna Baru\n";
+            cout << "Nama: "; getline(cin, parfums[jumlahUser ].pengguna.nama);
+            cout << "NIM (3 digit): "; getline(cin, parfums[jumlahUser ].pengguna.nim);
+            jumlahUser ++;
+            cout << "Registrasi berhasil! Anda sekarang dapat login.\n";
+        } else if (pilihan == 2) {
+            string nama, nim;
+            int percobaan = 0;
+
+            cout << "\n=================================================\n";
+            cout << "||           MANAJEMEN DISSCENT STORE          ||\n";
+            cout << "=================================================\n";
+
+            while (percobaan < 3) {
+                cout << "\nSelamat datang di Manajemen DisScent Store!\n";
+                cout << "Masukkan Nama: "; getline(cin, nama);
+                cout << "Masukkan NIM (3 digit): "; getline(cin, nim);
+
+                int userFoundIndex = -1; 
+                for (int i = 0; i < jumlahUser ; i++) {
+                    if (parfums[i].pengguna.nama == nama && parfums[i].pengguna.nim == nim) {
+                        userFoundIndex = i; 
+                        break;
+                    }
+                }
+
+                if (userFoundIndex != -1) {
+                    int menuPilihan;
                     do {
                         cout << "\n=================================================\n";
                         cout << "||                MANAJEMEN PARFUM             ||\n";
@@ -242,19 +110,151 @@ int main() {
                         cout << "Pilih menu: "; cin >> menuPilihan;
                         cin.ignore();
 
-                        switch (menuPilihan) {
-                            case 1: tampilkanData(); break;
-                            case 2: tambahParfum(); break;
-                            case 3: ubahParfum(); break;
-                            case 4: hapusParfum(); break;
-                            case 5: cout << "Kembali ke menu login1\n"; break;
-                            default: cout << "Pilihan tidak valid!\n";
+                        if (menuPilihan == 1) {
+                            cout << "\n+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
+                            cout << "| No | Merk                     | Nama Parfum               | Aroma             | Harga      | Ukuran     |" << endl;
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
+
+                            for (int i = 0; i < jumlahParfum; i++) {
+                                cout << "| " << (i + 1) << "  | " << parfums[i].merk;
+                                cout << string(25 - parfums[i].merk.length(), ' ') << "| " << parfums[i].nama;
+                                cout << string(25 - parfums[i].nama.length(), ' ') << "| " << parfums[i].aroma;
+                                cout << string(18 - parfums[i].aroma.length(), ' ') << "| " << parfums[i].harga;
+                                cout << " | " << parfums[i].ukuran << " |" << endl;
+                            }
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+\n" << endl;
+                        } else if (menuPilihan == 2) {
+                            if (jumlahParfum >= MAX_PARFUM) {
+                                cout << "Tidak bisa menambah parfum lagi, kapasitas sudah penuh.\n";
+                                continue;
+                            }
+
+                            cout << "\nTambah Parfum Baru\n";
+                            cout << "Merk Parfum: "; getline(cin, parfums[jumlahParfum].merk);
+                            cout << "Nama Parfum: "; getline(cin, parfums[jumlahParfum].nama);
+                            cout << "Aroma Parfum: "; getline(cin, parfums[jumlahParfum].aroma);
+                            cout << "Harga Parfum (Rp): "; getline(cin, parfums[jumlahParfum].harga);
+
+                            int pilihanUkuran; 
+                            do {
+                                cout << "Ukuran Parfum:\n";
+                                cout << "1. 50 ml\n";
+                                cout << "2. 100 ml\n";
+                                cout << "Pilih ukuran (1/2): ";
+                                cin >> pilihanUkuran; 
+                                cin.ignore(); 
+
+                                if (pilihanUkuran == 1) {
+                                    parfums[jumlahParfum].ukuran = "50 ml"; 
+                                    break; 
+                                } else if (pilihanUkuran == 2) {
+                                    parfums[jumlahParfum].ukuran = "100 ml"; 
+                                    break; 
+                                } else {
+                                    cout << "Pilihan tidak valid, silakan pilih 1 atau 2.\n";
+                                }
+                            } while (true); 
+
+                            jumlahParfum++;
+                            cout << "Parfum berhasil ditambahkan!\n";
+                        } else if (menuPilihan == 3) {
+                            cout << "\nDaftar Parfum:\n";
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
+                            cout << "| No | Merk                     | Nama Parfum               | Aroma             | Harga      | Ukuran     |" << endl;
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
+
+                            for (int i = 0; i < jumlahParfum; i++) {
+                                cout << "| " << (i + 1) << "  | " << parfums[i].merk;
+                                cout << string(25 - parfums[i].merk.length(), ' ') << "| " << parfums[i].nama;
+                                cout << string(25 - parfums[i].nama.length(), ' ') << "| " << parfums[i].aroma;
+                                cout << string(18 - parfums[i].aroma.length(), ' ') << "| " << parfums[i].harga;
+                                cout << " | " << parfums[i].ukuran << " |" << endl;
+                            }
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+\n" << endl;
+
+                            int index;
+                            cout << "Pilih nomor parfum yang ingin diubah: "; cin >> index;
+                            cin.ignore();
+
+                            if (index > 0 && index <= jumlahParfum) {
+                                cout << "Merk Parfum Baru: "; getline(cin, parfums[index - 1].merk);
+                                cout << "Nama Parfum Baru: "; getline(cin, parfums[index - 1].nama);
+                                cout << "Aroma Parfum Baru: "; getline(cin, parfums[index - 1].aroma);
+                                cout << "Harga Parfum Baru (Rp): "; getline(cin, parfums[index - 1].harga);
+
+                                int pilihanUkuran; 
+                                do {
+                                    cout << "Ukuran Parfum Baru:\n";
+                                    cout << "1. 50 ml\n";
+                                    cout << "2. 100 ml\n";
+                                    cout << "Pilih ukuran (1/2): ";
+                                    cin >> pilihanUkuran; 
+                                    cin.ignore(); 
+
+                                    if (pilihanUkuran == 1) {
+                                        parfums[index - 1].ukuran = "50 ml"; 
+                                        break; 
+                                    } else if (pilihanUkuran == 2) {
+                                        parfums[index - 1].ukuran = "100 ml"; 
+                                        break; 
+                                    } else {
+                                        cout << "Pilihan tidak valid, silakan pilih 1 atau 2.\n";
+                                    }
+                                } while (true); 
+
+                                cout << "Data parfum berhasil diubah!\n";
+                            } else {
+                                cout << "Nomor parfum tidak ada!\n";
+                            }
+                        } else if (menuPilihan == 4) {
+                            cout << "\nDaftar Parfum:\n";
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
+                            cout << "| No | Merk                     | Nama Parfum               | Aroma             | Harga      | Ukuran     |" << endl;
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+" << endl;
+
+                            for (int i = 0; i < jumlahParfum; i++) {
+                                cout << "| " << (i + 1) << "  | " << parfums[i].merk;
+                                cout << string(25 - parfums[i].merk.length(), ' ') << "| " << parfums[i].nama;
+                                cout << string(25 - parfums[i].nama.length(), ' ') << "| " << parfums[i].aroma;
+                                cout << string(18 - parfums[i].aroma.length(), ' ') << "| " << parfums[i].harga;
+                                cout << " | " << parfums[i].ukuran << " |" << endl;
+                            }
+                            cout << "+----+---------------------------+---------------------------+--------------------+------------+------------+\n" << endl;
+
+                            int index;
+                            cout << "Pilih nomor parfum yang ingin dihapus: "; cin >> index;
+                            cin.ignore();
+
+                            if (index > 0 && index <= jumlahParfum) {
+                                for (int i = index - 1; i < jumlahParfum - 1; i++) {
+                                    parfums[i] = parfums[i + 1]; 
+                                }
+                                jumlahParfum--;
+                                cout << "Data parfum berhasil dihapus!\n";
+                            } else {
+                                cout << "Nomor parfum tidak ada!\n";
+                            }
+                        } else if (menuPilihan == 5) {
+                            cout << "Kembali ke menu login\n";
+                        } else {
+                            cout << "Pilihan tidak valid!\n";
                         }
                     } while (menuPilihan != 5);
+                    break; 
+                } else {
+                    percobaan++;
+                    cout << "\nLogin gagal, silahkan coba lagi! Percobaan ke-" << percobaan << " dari 3.\n";
                 }
-                break;
-            case 3: cout << "Keluar dari program, Terima kasih!\n"; break;
-            default: cout << "Pilihan tidak valid!\n";
+            }
+
+            if (percobaan == 3) {
+                cout << "\nYahh login sudah gagal sebanyak 3 kali. Program berhenti.\n";
+                exit(0); 
+            }
+        } else if (pilihan == 3) {
+            cout << "Keluar dari program, Terima kasih!\n";
+        } else {
+            cout << "Pilihan tidak valid!\n";
         }
     } while (pilihan != 3);
 
